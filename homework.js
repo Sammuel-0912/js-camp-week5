@@ -57,6 +57,7 @@ const orders = [
  */
 function getProductById(products, productId) {
   // 請實作此函式
+  return products.id === productId;
 }
 
 /**
@@ -67,6 +68,7 @@ function getProductById(products, productId) {
  */
 function getProductsByCategory(products, category) {
   // 請實作此函式
+  return products.category;
 }
 
 /**
@@ -77,6 +79,7 @@ function getProductsByCategory(products, category) {
  */
 function getDiscountRate(product) {
   // 請實作此函式
+    return Math.round((product.price / product.prigin_price) * 100) / 10
 }
 
 /**
@@ -86,6 +89,7 @@ function getDiscountRate(product) {
  */
 function getAllCategories(products) {
   // 請實作此函式
+  return products.category;
 }
 
 // ========================================
@@ -99,6 +103,7 @@ function getAllCategories(products) {
  */
 function calculateCartOriginalTotal(carts) {
   // 請實作此函式
+  return carts.origin_price * carts.quantity;
 }
 
 /**
@@ -108,6 +113,7 @@ function calculateCartOriginalTotal(carts) {
  */
 function calculateCartTotal(carts) {
   // 請實作此函式
+  return carts.price * carts.quantity;
 }
 
 /**
@@ -117,6 +123,7 @@ function calculateCartTotal(carts) {
  */
 function calculateSavings(carts) {
   // 請實作此函式
+  return calculateCartOriginalTotal(carts) - calculateCartTotal(carts);
 }
 
 /**
@@ -126,6 +133,8 @@ function calculateSavings(carts) {
  */
 function calculateCartItemCount(carts) {
   // 請實作此函式
+  return carts.reduce((acc,cur) => (acc + cur.quantity),0);
+
 }
 
 /**
