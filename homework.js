@@ -57,7 +57,8 @@ const orders = [
  */
 function getProductById(products, productId) {
   // 請實作此函式
-  return products.id === productId;
+  const product = products.find((item) => item.id === productId)
+  return product || null;
 }
 
 /**
@@ -68,7 +69,10 @@ function getProductById(products, productId) {
  */
 function getProductsByCategory(products, category) {
   // 請實作此函式
-  return products.category;
+  if(category === "全部") {
+    return products;
+  }
+  return products.filter(item => item.category === category);
 }
 
 /**
@@ -79,7 +83,7 @@ function getProductsByCategory(products, category) {
  */
 function getDiscountRate(product) {
   // 請實作此函式
-    return Math.round((product.price / product.prigin_price) * 100) / 10
+    return `JSON.stringify(Math.round((product.price / product.prigin_price) * 100) / 10)折`
 }
 
 /**
@@ -89,7 +93,9 @@ function getDiscountRate(product) {
  */
 function getAllCategories(products) {
   // 請實作此函式
-  return products.category;
+  const categories = products.map(item => item.category);
+  const newSet = new Set(categories);
+  return [...newSet];
 }
 
 // ========================================
@@ -103,7 +109,9 @@ function getAllCategories(products) {
  */
 function calculateCartOriginalTotal(carts) {
   // 請實作此函式
-  return carts.origin_price * carts.quantity;
+  return carts.reduce((acc,item) => {
+    return  acc + (item.product.origin_price * item.quantity);
+    },0);
 }
 
 /**
@@ -113,8 +121,10 @@ function calculateCartOriginalTotal(carts) {
  */
 function calculateCartTotal(carts) {
   // 請實作此函式
-  return carts.price * carts.quantity;
-}
+    return carts.reduce((acc,item) => {
+    return  acc + (item.product.price * item.quantity);
+    },0);
+  }
 
 /**
  * 3. 計算總共省下多少錢
@@ -133,7 +143,7 @@ function calculateSavings(carts) {
  */
 function calculateCartItemCount(carts) {
   // 請實作此函式
-  return carts.reduce((acc,cur) => (acc + cur.quantity),0);
+  return carts.reduce((acc,item) => (acc + item.quantity), 0);
 
 }
 
@@ -145,6 +155,7 @@ function calculateCartItemCount(carts) {
  */
 function isProductInCart(carts, productId) {
   // 請實作此函式
+  return carts.some(item => item.product.productId === productId);
 }
 
 // ========================================
@@ -161,6 +172,24 @@ function isProductInCart(carts, productId) {
  */
 function addToCart(carts, product, quantity) {
   // 請實作此函式
+  const isExit = carts.find((item) => item.product.productId === product.productId);
+  //如果存在，使用map回傳新陣列
+  if(isExit) {
+    return carts.map(item => {
+      if(item.product.productId === product.productId) {
+        return {...item, quantity: item.quantity + quantity};
+      }
+      return item;
+    });
+  } else {
+    //如果不存在，回傳新陣列
+    const newItem = {
+      id: `cart-${Date.now()}`,
+      product: product,
+      quantity: quantity
+    };
+    return [...carts, newItem];
+  }
 }
 
 /**
