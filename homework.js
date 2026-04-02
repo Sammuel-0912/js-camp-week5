@@ -172,11 +172,11 @@ function isProductInCart(carts, productId) {
  */
 function addToCart(carts, product, quantity) {
   // 請實作此函式
-  const isExit = carts.find((item) => item.product.productId === product.productId);
+  const isExit = carts.find((item) => item.product.id === product.id);
   //如果存在，使用map回傳新陣列
   if(isExit) {
     return carts.map(item => {
-      if(item.product.productId === product.productId) {
+      if(item.product.id === product.id) {
         return {...item, quantity: item.quantity + quantity};
       }
       return item;
@@ -188,6 +188,7 @@ function addToCart(carts, product, quantity) {
       product: product,
       quantity: quantity
     };
+    //使用展開運算子確保回傳的是新陣列，不修改原陣列
     return [...carts, newItem];
   }
 }
@@ -201,6 +202,16 @@ function addToCart(carts, product, quantity) {
  */
 function updateCartItemQuantity(carts, cartId, newQuantity) {
   // 請實作此函式
+  if(newQuantity <= 0 ) {
+    return carts.filter(item => item.id !== cartId);
+  }
+  //數量>0時，使用map更新特定項目的數量
+  return carts.map(item => {
+    if(item.id === cartId) {
+      return {...item, quantity: newQuantity};
+    }
+    return item;
+  });
 }
 
 /**
@@ -211,6 +222,7 @@ function updateCartItemQuantity(carts, cartId, newQuantity) {
  */
 function removeFromCart(carts, cartId) {
   // 請實作此函式
+  return carts.filter(item => item.id !== cartId);
 }
 
 /**
@@ -219,6 +231,7 @@ function removeFromCart(carts, cartId) {
  */
 function clearCart() {
   // 請實作此函式
+  return [];
 }
 
 // ========================================
