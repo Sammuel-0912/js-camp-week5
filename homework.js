@@ -155,7 +155,7 @@ function calculateCartItemCount(carts) {
  */
 function isProductInCart(carts, productId) {
   // 請實作此函式
-  return carts.some(item => item.product.productId === productId);
+  return carts.some(item => item.product.id === productId);
 }
 
 // ========================================
@@ -245,6 +245,12 @@ function clearCart() {
  */
 function calculateTotalRevenue(orders) {
   // 請實作此函式
+  return orders.reduce((acc, order) => {
+    if(order.paid === true) {
+    return acc + order.total;
+  }
+  return acc;
+  },0) 
 }
 
 /**
@@ -255,6 +261,9 @@ function calculateTotalRevenue(orders) {
  */
 function filterOrdersByStatus(orders, isPaid) {
   // 請實作此函式
+  return orders.filter((item) => {
+    return item.paid === isPaid;
+  })
 }
 
 /**
@@ -271,6 +280,22 @@ function filterOrdersByStatus(orders, isPaid) {
  */
 function generateOrderReport(orders) {
   // 請實作此函式
+  const PaidOrders = orders.filter((item) => item.paid === true);
+  const unPaidOrders = orders.filter((item) => item.paid === false);
+  const totalRevenue = calculateTotalRevenue(orders);
+
+  //計算總訂單金額
+  const totalOrdersAmount = orders.reduce((acc,cur) => {
+    return acc + cur.total;
+  },0);
+  const averageOrdersValue = orders.length > 0 ? totalOrdersAmount / orders.length : 0;
+  return {
+    totalOrders: orders.length,
+    paidOrders: PaidOrders.length,
+    unpaidOrders: unPaidOrders.length,
+    totalRevenue: totalRevenue,
+    averageOrderValue: Math.round(averageOrdersValue)
+  }
 }
 
 /**
@@ -284,6 +309,12 @@ function generateOrderReport(orders) {
  */
 function groupOrdersByPayment(orders) {
   // 請實作此函式
+  const ATMList = orders.filter((item) => item.user.payment === 'ATM');
+  const creditCardList = orders.filter((item) => item.user.payment === 'Credit Card');
+  return {
+    "ATM": ATMList,
+    "Credit Card": creditCardList
+  }
 }
 
 // ========================================
