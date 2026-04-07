@@ -83,8 +83,9 @@ function getProductsByCategory(products, category) {
  */
 function getDiscountRate(product) {
   // 請實作此函式
-    return `JSON.stringify(Math.round((product.price / product.prigin_price) * 100) / 10)折`
-}
+    const rate = Math.round((product.price / product.origin_price) * 100) / 10
+    return `${rate}折` 
+  }
 
 /**
  * 4. 取得所有產品分類（不重複）
@@ -261,8 +262,8 @@ function calculateTotalRevenue(orders) {
  */
 function filterOrdersByStatus(orders, isPaid) {
   // 請實作此函式
-  return orders.filter((item) => {
-    return item.paid === isPaid;
+  return orders.filter((order) => {
+    return order.paid === isPaid;
   })
 }
 
@@ -308,13 +309,20 @@ function generateOrderReport(orders) {
  * }
  */
 function groupOrdersByPayment(orders) {
+  //使用groupby函式寫法
   // 請實作此函式
-  const ATMList = orders.filter((item) => item.user.payment === 'ATM');
-  const creditCardList = orders.filter((item) => item.user.payment === 'Credit Card');
-  return {
-    "ATM": ATMList,
-    "Credit Card": creditCardList
-  }
+  return Object.groupBy(orders, (order) => order.user.payment);
+  
+  //使用reduce寫法
+  // return orders.reduce((acc,order) => {
+  //   const method = order.user.payment;
+  //   //如果累加器沒有這個分類，就先建立空陣列
+  //   if(!acc[method]) {
+  //     acc[method] = [];
+  //   }
+  //   acc[method].push(order)
+  //   return acc;
+  // },{})
 }
 
 // ========================================
